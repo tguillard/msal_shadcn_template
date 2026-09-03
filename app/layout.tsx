@@ -1,10 +1,15 @@
+"use client"
 import { Geist, Geist_Mono, Inter } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
+import { MsalProvider } from "@azure/msal-react";
+import { loginRequest, msalInstance } from "./auth/msal";
+import AuthLayout from "./auth/AuthLayout";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'})
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 const fontMono = Geist_Mono({
   subsets: ["latin"],
@@ -23,8 +28,15 @@ export default function RootLayout({
       className={cn("antialiased", fontMono.variable, "font-sans", inter.variable)}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <MsalProvider instance={msalInstance}>
+
+          <ThemeProvider>
+            <AuthLayout>
+              {children}
+            </AuthLayout>
+          </ThemeProvider>
+        </MsalProvider>
       </body>
-    </html>
+    </html >
   )
 }
